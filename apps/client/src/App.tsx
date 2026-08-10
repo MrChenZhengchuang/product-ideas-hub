@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import type { ClientUser } from './api';
-import { fetchCurrentClientUser } from './api';
+import { fetchCurrentClientUser, IS_DEMO_MODE } from './api';
 import { clearClientToken, getClientToken } from './auth';
 import { AboutPage } from './pages/AboutPage';
 import { AuthPage } from './pages/AuthPage';
@@ -35,7 +35,7 @@ export default function App() {
   const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
-    if (!getClientToken()) {
+    if (!IS_DEMO_MODE && !getClientToken()) {
       setLoadingUser(false);
       return;
     }
@@ -87,9 +87,11 @@ export default function App() {
                 <NavLink className="site-header__login" to="/me">
                   我的主页
                 </NavLink>
-                <button className="site-header__ghost" type="button" onClick={handleLogout}>
-                  退出
-                </button>
+                {!IS_DEMO_MODE ? (
+                  <button className="site-header__ghost" type="button" onClick={handleLogout}>
+                    退出
+                  </button>
+                ) : null}
               </>
             ) : (
               <NavLink className="site-header__login" to="/auth">
@@ -102,6 +104,13 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      {IS_DEMO_MODE ? (
+        <aside className="demo-banner">
+          <strong>在线交互演示</strong>
+          <span>数据仅保存在当前浏览器；完整 Java + MySQL 版本请查看 GitHub 仓库。</span>
+        </aside>
+      ) : null}
 
       {loadingUser ? (
         <div className="page-loading">正在初始化用户信息...</div>

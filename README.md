@@ -1,15 +1,20 @@
 # IdeaHub — Product Ideas Community Starter
 
 [![CI](https://github.com/MrChenZhengchuang/product-ideas-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/MrChenZhengchuang/product-ideas-hub/actions/workflows/ci.yml)
+[![Demo](https://github.com/MrChenZhengchuang/product-ideas-hub/actions/workflows/pages.yml/badge.svg)](https://mrchenzhengchuang.github.io/product-ideas-hub/)
 [![Release](https://img.shields.io/github/v/release/MrChenZhengchuang/product-ideas-hub)](https://github.com/MrChenZhengchuang/product-ideas-hub/releases/latest)
 [![License](https://img.shields.io/github/license/MrChenZhengchuang/product-ideas-hub)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/MrChenZhengchuang/product-ideas-hub?style=social)](https://github.com/MrChenZhengchuang/product-ideas-hub/stargazers)
+
+[在线交互演示](https://mrchenzhengchuang.github.io/product-ideas-hub/) · [提交建议](https://github.com/MrChenZhengchuang/product-ideas-hub/issues)
 
 面向独立开发者、产品经理和创业者的产品灵感社区全栈 Starter。
 
 一套仓库同时包含 React Web、Taro H5 / 微信小程序、Ant Design 管理后台，以及 Spring Boot + MyBatis API，完整覆盖“发现项目 → 用户投稿 → 后台审核 → 公开展示 → 收藏点赞”的内容社区闭环。
 
 > A multi-platform product ideas community starter built with React, Taro, Spring Boot, MyBatis and MySQL.
+
+在线演示运行在 GitHub Pages，使用浏览器内置模拟数据，可体验搜索、详情、收藏、点赞、投稿和个人中心；完整 Java + MySQL 业务闭环请按下方说明在本地启动。
 
 如果这个 Starter 对你有帮助，欢迎点一个 Star，便于持续关注后续升级与迁移说明。
 
@@ -220,6 +225,8 @@ npm run test:java           # Java 测试
 | `CORS_ALLOWED_ORIGIN_PATTERN` | 允许的前端来源正则 | 本地地址 |
 | `UPLOAD_DIR` | 上传目录 | `uploads` |
 | `CLIENT_API_ORIGIN` | 小程序生产 API 地址 | 无 |
+| `VITE_DEMO_MODE` | 用户端启用浏览器内演示数据 | `false` |
+| `VITE_BASE_PATH` | 用户端静态资源部署子路径 | `/` |
 
 ## 开发与贡献
 
@@ -242,7 +249,7 @@ npm run test:java
 - [x] Taro H5 / 微信小程序
 - [x] Docker 化数据库和 Java API
 - [x] 用户端和管理后台界面截图
-- [ ] 在线演示
+- [x] 在线演示（GitHub Pages 交互演示模式）
 - [ ] 评论、通知和举报
 - [ ] 标签、榜单和推荐排序
 - [ ] 完整生产部署示例

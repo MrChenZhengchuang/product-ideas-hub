@@ -32,6 +32,25 @@ select {
   padding: 104px 24px 64px;
 }
 
+.demo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 1180px;
+  margin: -18px auto 14px;
+  padding: 9px 16px;
+  border: 1px solid rgba(29, 78, 216, 0.16);
+  border-radius: 12px;
+  background: rgba(239, 246, 255, 0.92);
+  color: #475569;
+  font-size: 12px;
+}
+
+.demo-banner strong {
+  color: #1d4ed8;
+}
+
 .site-header {
   position: fixed;
   top: 0;

@@ -1,6 +1,8 @@
 import { clearClientToken, getClientToken } from './auth';
+import { demoRequest } from './demo-api';
 
-const API_BASE_URL = '/api/client';
+export const IS_DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
+const API_BASE_URL = import.meta.env.VITE_CLIENT_API_BASE_URL || '/api/client';
 
 export type ProjectCategory = 'all' | 'ai' | 'ecommerce' | 'tool' | 'content';
 
@@ -79,6 +81,10 @@ export type CaptchaPayload = {
 };
 
 async function request<T>(path: string, options?: RequestInit) {
+  if (IS_DEMO_MODE) {
+    return demoRequest<T>(path, options);
+  }
+
   const token = getClientToken();
   const headers: Record<string, string> = {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
