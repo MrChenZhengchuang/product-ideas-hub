@@ -1,10 +1,17 @@
 # IdeaHub — Product Ideas Community Starter
 
+[![CI](https://github.com/MrChenZhengchuang/product-ideas-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/MrChenZhengchuang/product-ideas-hub/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/MrChenZhengchuang/product-ideas-hub)](https://github.com/MrChenZhengchuang/product-ideas-hub/releases/latest)
+[![License](https://img.shields.io/github/license/MrChenZhengchuang/product-ideas-hub)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/MrChenZhengchuang/product-ideas-hub?style=social)](https://github.com/MrChenZhengchuang/product-ideas-hub/stargazers)
+
 面向独立开发者、产品经理和创业者的产品灵感社区全栈 Starter。
 
 一套仓库同时包含 React Web、Taro H5 / 微信小程序、Ant Design 管理后台，以及 Spring Boot + MyBatis API，完整覆盖“发现项目 → 用户投稿 → 后台审核 → 公开展示 → 收藏点赞”的内容社区闭环。
 
 > A multi-platform product ideas community starter built with React, Taro, Spring Boot, MyBatis and MySQL.
+
+如果这个 Starter 对你有帮助，欢迎点一个 Star，便于持续关注后续升级与迁移说明。
 
 ## 为什么是 IdeaHub
 
