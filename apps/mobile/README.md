@@ -1,41 +1,65 @@
-# Mobile App Scaffold
+# IdeaHub Mobile
 
-这个目录是新的跨端前台落点，目标顺序是：
+IdeaHub 的 Taro 跨端客户端，使用 React + TypeScript 开发，当前支持 H5 和微信小程序构建。
 
-1. 先交付 H5
-2. 再编译微信小程序
-3. 业务稳定后再评估 App 方案
+## 已实现功能
 
-当前骨架包含：
+- 项目列表、关键词搜索和分类筛选
+- 项目详情、浏览数据、收藏和点赞
+- 手机号注册、登录和图形验证码
+- 项目投稿与审核状态展示
+- 个人中心、我的发布和我的收藏
+- 修改密码、趋势页和关于页
+- H5 / 微信小程序共享业务代码与请求层
 
-- Taro + React + TypeScript 基础配置
-- H5 / 微信小程序双脚本
-- 对应现有前台页面的路由占位页
-- 统一的跨端请求层起点 `src/services/http.ts`
+## 本地开发
 
-## 建议迁移顺序
-
-1. `HomePage` -> `pages/home`
-2. `ProjectDetailPage` -> `pages/project-detail`
-3. `AuthPage` -> `pages/auth`
-4. `PublishPage` -> `pages/publish`
-5. `MePage` + `ChangePasswordPage` -> `pages/me` / `pages/change-password`
-6. `TrendsPage` / `AboutPage`
-
-## 本地命令
+建议在仓库根目录安装依赖并运行命令：
 
 ```bash
-npm install
+npm ci
 npm run dev:mobile
+```
+
+微信小程序监听构建：
+
+```bash
 npm run dev:mobile:weapp
 ```
 
 默认约定：
 
 - H5 开发端口：`10086`
-- H5 请求代理：`http://127.0.0.1:8080`（Java 服务）
-- 小程序开发时默认直接请求：`http://127.0.0.1:8080/api/client`
+- H5 通过 `/api/client` 代理访问 `http://127.0.0.1:8080`
+- 小程序开发环境直接访问 Java API
+- 浏览器宽度不小于 769px 时，H5 默认跳转到 PC 端；追加 `?mobile=1` 可强制停留在移动版
 
-后面上线小程序时，需要把 `config/prod.ts` 里的 `CLIENT_API_ORIGIN` 改成正式 Java API 域名，并完成小程序合法域名配置。
+## 生产构建
 
-H5 在浏览器宽度 ≥ 769px 时会自动跳转到 PC 官网（`CLIENT_WEB_ORIGIN`）。若需强制使用手机版，在地址后加 `?mobile=1`。
+构建 H5：
+
+```bash
+npm run build:mobile
+```
+
+构建微信小程序，并指定线上 API：
+
+```bash
+CLIENT_API_ORIGIN=https://api.example.com npm run build:mobile:weapp
+```
+
+部署微信小程序前，还需要在微信公众平台配置合法请求域名，并确保 API 使用有效的 HTTPS 证书。
+
+## 目录说明
+
+```text
+src/
+├── features/       # 页面共享组件与壳层
+├── pages/          # Taro 页面
+├── services/       # Client API 和请求封装
+├── utils/          # 跨页面工具
+├── app.config.ts   # 页面与 TabBar 配置
+└── app.tsx         # 应用入口
+```
+
+环境与代理配置位于 `config/`，业务接口集中在 `src/services/client-api.ts`。

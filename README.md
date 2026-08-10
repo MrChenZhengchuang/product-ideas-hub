@@ -167,13 +167,12 @@ H5 开发环境使用 `/api/client` 代理；小程序环境会直接请求 `CLI
 │   ├── server          # Express 对照服务
 │   └── server-java     # Spring Boot 推荐后端
 ├── .github/workflows   # CI
+├── docs
+│   ├── images          # README 截图与仓库图片
+│   └── archive         # 已完成阶段的历史规划文档
 ├── compose.yml         # MySQL + Java API
-├── PRODUCT_STRATEGY.md          # 早期产品决策记录
-├── PRODUCT_P1_EXECUTION_PLAN.md # P1 实施记录
 └── package.json
 ```
-
-本地 `project/` 目录用于其他产品实验，不属于 IdeaHub 公开仓库。
 
 ## 常用命令
 
