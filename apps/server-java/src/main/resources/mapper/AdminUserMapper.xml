@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.productideas.mapper.AdminUserMapper">
+
+  <sql id="systemUserWhere">
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND (au.name LIKE CONCAT('%', #{keyword}, '%') OR au.account LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
+      <if test="status != null and status != ''">
+        AND au.status = #{status}
+      </if>
+    </where>
+  </sql>
+
+  <select id="countSystemUsers" resultType="long">
+    SELECT COUNT(*)
+    FROM admin_users au
+    <include refid="systemUserWhere"/>
+  </select>
+
+  <select id="listSystemUsers" resultType="com.productideas.domain.SystemUserItem">
+    SELECT
+      au.id,
+      au.name,
+      au.account,
+      au.department_id AS departmentId,
+      d.name AS departmentName,
+      au.status
+    FROM admin_users au
+    LEFT JOIN departments d ON d.id = au.department_id
+    <include refid="systemUserWhere"/>
+    ORDER BY au.id ASC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <select id="listUserRolesByUserIds" resultType="com.productideas.domain.AdminUserRoleRow">
+    SELECT
+      aur.admin_user_id AS adminUserId,
+      r.id AS roleId,
+      r.name AS roleName
+    FROM admin_user_roles aur
+    INNER JOIN roles r ON r.id = aur.role_id
+    WHERE aur.admin_user_id IN
+    <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+      #{userId}
+    </foreach>
+    ORDER BY aur.admin_user_id ASC, r.id ASC
+  </select>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.productideas.mapper.RoleMapper">
+
+  <select id="countRoles" resultType="long">
+    SELECT COUNT(*) FROM roles
+  </select>
+
+  <select id="listRoles" resultType="com.productideas.domain.RoleListItem">
+    SELECT
+      t.id,
+      t.name,
+      t.scope,
+      t.status,
+      t.members
+    FROM (
+      SELECT
+        r.id,
+        r.name,
+        r.scope,
+        <choose>
+          <when test="hasStatus">r.status</when>
+          <otherwise>'启用'</otherwise>
+        </choose> AS status,
+        COUNT(DISTINCT aur.admin_user_id) AS members
+      FROM roles r
+      LEFT JOIN admin_user_roles aur ON aur.role_id = r.id
+      GROUP BY r.id, r.name, r.scope
+      <if test="hasStatus">, r.status</if>
+    ) t
+    ORDER BY t.id ASC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <select id="findById" resultType="com.productideas.domain.RoleDetail">
+    SELECT
+      id,
+      name,
+      scope,
+      <choose>
+        <when test="hasStatus">status</when>
+        <otherwise>'启用'</otherwise>
+      </choose> AS status
+    FROM roles
+    WHERE id = #{id}
+    LIMIT 1
+  </select>
+
+</mapper>

@@ -1,0 +1,113 @@
+.mobile-auth__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mobile-auth__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #52607a;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mobile-auth__tab--active {
+  background: #111827;
+  color: #ffffff;
+}
+
+.mobile-auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-auth__input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  font-size: 16px;
+
+  .weui-input,
+  .taroify-input__native,
+  input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: #111827;
+    font-size: 16px;
+    line-height: 52px;
+  }
+
+  input {
+    border: 0;
+    background: transparent;
+  }
+
+  .weui-input::placeholder,
+  input::placeholder {
+    color: #667085;
+  }
+}
+
+.mobile-auth__captcha {
+  display: grid;
+  grid-template-columns: 1fr 132px;
+  gap: 10px;
+}
+
+.mobile-auth__input--captcha {
+  min-width: 0;
+}
+
+.mobile-auth__captcha-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 10px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+.mobile-auth__error {
+  color: #d92d20;
+  font-size: 14px;
+}
+
+.mobile-auth__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  border-radius: 14px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 52px;
+  text-align: center;
+}
+
+.mobile-auth__submit::after {
+  border: 0;
+}
+
+.mobile-auth__hint {
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.6;
+}

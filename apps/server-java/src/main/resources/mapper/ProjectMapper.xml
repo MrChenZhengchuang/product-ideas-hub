@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.productideas.mapper.ProjectMapper">
+
+  <sql id="projectDetailSelect">
+    SELECT
+      p.id,
+      p.title,
+      COALESCE(NULLIF(p.summary, ''), p.description) AS description,
+      p.content,
+      c.category_key AS category,
+      c.category_name AS categoryLabel,
+      p.cover_image AS image,
+      p.status,
+      p.audit_status AS auditStatus,
+      p.audit_comment AS auditComment,
+      p.view_count AS viewCount,
+      p.favorite_count AS favoriteCount,
+      p.like_count AS likeCount,
+      p.creator_user_id AS creatorUserId,
+      p.created_at AS createdAt,
+      su.nickname AS authorName
+    FROM projects p
+    INNER JOIN project_categories c ON c.id = p.category_id
+    LEFT JOIN site_users su ON su.id = p.creator_user_id
+  </sql>
+
+  <sql id="projectMyItemSelect">
+    SELECT
+      p.id,
+      p.title,
+      COALESCE(NULLIF(p.summary, ''), p.description) AS description,
+      c.category_key AS category,
+      c.category_name AS categoryLabel,
+      p.cover_image AS image,
+      p.status,
+      p.audit_status AS auditStatus,
+      p.audit_comment AS auditComment,
+      p.view_count AS viewCount,
+      p.favorite_count AS favoriteCount,
+      p.like_count AS likeCount,
+      p.created_at AS createdAt
+    FROM projects p
+    INNER JOIN project_categories c ON c.id = p.category_id
+  </sql>
+
+  <select id="listCategories" resultType="com.productideas.domain.CategoryItem">
+    SELECT category_key AS `key`, category_name AS label
+    FROM project_categories
+    ORDER BY sort_order ASC, id ASC
+  </select>
+
+  <select id="listPublishedProjects" resultType="com.productideas.domain.ProjectListItem">
+    SELECT
+      p.id,
+      p.title,
+      c.category_key AS category,
+      p.cover_image AS image,
+      COALESCE(NULLIF(p.summary, ''), p.description) AS description
+    FROM projects p
+    INNER JOIN project_categories c ON c.id = p.category_id
+    <where>
+      p.status = 'published' AND p.audit_status = 'approved'
+      <if test="keyword != null and keyword != ''">
+        AND p.title LIKE CONCAT('%', #{keyword}, '%')
+      </if>
+      <if test="category != null and category != '' and category != 'all'">
+        AND c.category_key = #{category}
+      </if>
+    </where>
+    ORDER BY p.id DESC
+  </select>
+
+  <select id="findById" resultType="com.productideas.domain.ProjectDetail">
+    <include refid="projectDetailSelect"/>
+    WHERE p.id = #{id}
+    LIMIT 1
+  </select>
+
+  <select id="selectUserProjectStats" resultType="com.productideas.domain.UserProfileStats">
+    SELECT
+      COUNT(*) AS publishedProjects,
+      SUM(CASE WHEN audit_status = 'pending' THEN 1 ELSE 0 END) AS pendingProjects,
+      COALESCE(SUM(favorite_count), 0) AS totalFavorites,
+      COALESCE(SUM(like_count), 0) AS totalLikes
+    FROM projects
+    WHERE creator_user_id = #{userId}
+  </select>
+
+  <select id="listMyProjects" resultType="com.productideas.domain.ProjectMyItem">
+    <include refid="projectMyItemSelect"/>
+    WHERE p.creator_user_id = #{userId}
+    ORDER BY p.id DESC
+  </select>
+
+  <select id="listFavoriteProjects" resultType="com.productideas.domain.ProjectFavoriteItem">
+    SELECT
+      p.id,
+      p.title,
+      COALESCE(NULLIF(p.summary, ''), p.description) AS description,
+      c.category_key AS category,
+      c.category_name AS categoryLabel,
+      p.cover_image AS image,
+      p.status,
+      p.audit_status AS auditStatus,
+      p.audit_comment AS auditComment,
+      p.view_count AS viewCount,
+      p.favorite_count AS favoriteCount,
+      p.like_count AS likeCount,
+      pf.created_at AS favoritedAt,
+      p.created_at AS createdAt,
+      su.nickname AS authorName
+    FROM project_favorites pf
+    INNER JOIN projects p ON p.id = pf.project_id
+    INNER JOIN project_categories c ON c.id = p.category_id
+    LEFT JOIN site_users su ON su.id = p.creator_user_id
+    WHERE pf.user_id = #{userId}
+      AND p.status = 'published'
+      AND p.audit_status = 'approved'
+    ORDER BY pf.id DESC
+  </select>
+
+  <select id="findFavoriteId" resultType="java.lang.Long">
+    SELECT id
+    FROM project_favorites
+    WHERE project_id = #{projectId} AND user_id = #{userId}
+    LIMIT 1
+  </select>
+
+  <select id="findLikeId" resultType="java.lang.Long">
+    SELECT id
+    FROM project_likes
+    WHERE project_id = #{projectId} AND user_id = #{userId}
+    LIMIT 1
+  </select>
+
+  <insert id="insertFavorite">
+    INSERT IGNORE INTO project_favorites (project_id, user_id)
+    VALUES (#{projectId}, #{userId})
+  </insert>
+
+  <delete id="deleteFavorite">
+    DELETE FROM project_favorites
+    WHERE project_id = #{projectId} AND user_id = #{userId}
+  </delete>
+
+  <update id="recalcFavoriteCount">
+    UPDATE projects
+    SET favorite_count = (
+      SELECT COUNT(*) FROM project_favorites WHERE project_id = #{projectId}
+    )
+    WHERE id = #{projectId}
+  </update>
+
+  <insert id="insertLike">
+    INSERT IGNORE INTO project_likes (project_id, user_id)
+    VALUES (#{projectId}, #{userId})
+  </insert>
+
+  <delete id="deleteLike">
+    DELETE FROM project_likes
+    WHERE project_id = #{projectId} AND user_id = #{userId}
+  </delete>
+
+  <update id="recalcLikeCount">
+    UPDATE projects
+    SET like_count = (
+      SELECT COUNT(*) FROM project_likes WHERE project_id = #{projectId}
+    )
+    WHERE id = #{projectId}
+  </update>
+
+  <select id="findRecentViewId" resultType="java.lang.Long">
+    SELECT id
+    FROM project_views
+    WHERE project_id = #{projectId}
+      AND user_id = #{userId}
+      AND created_at >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+    ORDER BY id DESC
+    LIMIT 1
+  </select>
+
+  <insert id="insertView">
+    INSERT INTO project_views (project_id, user_id)
+    VALUES (#{projectId}, #{userId})
+  </insert>
+
+  <update id="incrementViewCount">
+    UPDATE projects SET view_count = view_count + 1 WHERE id = #{projectId}
+  </update>
+
+  <select id="findCategoryIdByKey" resultType="java.lang.Long">
+    SELECT id
+    FROM project_categories
+    WHERE category_key = #{categoryKey}
+    LIMIT 1
+  </select>
+
+  <insert id="insertUserProject" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    INSERT INTO projects (
+      title,
+      description,
+      summary,
+      content,
+      category_id,
+      cover_image,
+      creator_user_id,
+      status,
+      audit_status,
+      audit_comment,
+      sort_order
+    )
+    VALUES (
+      #{title},
+      #{description},
+      #{summary},
+      #{content},
+      #{categoryId},
+      #{coverImage},
+      #{creatorUserId},
+      'draft',
+      'pending',
+      '',
+      0
+    )
+  </insert>
+
+  <select id="listAdminCategories" resultType="com.productideas.domain.ProjectCategoryAdmin">
+    SELECT id, category_key AS `key`, category_name AS label, sort_order AS sortOrder
+    FROM project_categories
+    ORDER BY sort_order ASC, id ASC
+  </select>
+
+  <sql id="adminProjectWhere">
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND p.title LIKE CONCAT('%', #{keyword}, '%')
+      </if>
+      <if test="category != null and category != '' and category != 'all'">
+        AND c.category_key = #{category}
+      </if>
+      <if test="status != null and status != ''">
+        AND p.status = #{status}
+      </if>
+      <if test="auditStatus != null and auditStatus != ''">
+        AND p.audit_status = #{auditStatus}
+      </if>
+    </where>
+  </sql>
+
+  <select id="countAdminProjects" resultType="long">
+    SELECT COUNT(*)
+    FROM projects p
+    INNER JOIN project_categories c ON c.id = p.category_id
+    <include refid="adminProjectWhere"/>
+  </select>
+
+  <select id="listAdminProjects" resultType="com.productideas.domain.AdminProjectItem">
+    SELECT
+      p.id,
+      p.title,
+      COALESCE(NULLIF(p.summary, ''), p.description) AS description,
+      p.cover_image AS image,
+      p.status,
+      p.audit_status AS auditStatus,
+      p.audit_comment AS auditComment,
+      p.view_count AS viewCount,
+      p.favorite_count AS favoriteCount,
+      p.like_count AS likeCount,
+      p.sort_order AS sortOrder,
+      p.created_at AS createdAt,
+      p.audited_at AS auditedAt,
+      c.id AS categoryId,
+      c.category_key AS category,
+      c.category_name AS categoryLabel,
+      su.nickname AS creatorName,
+      au.name AS auditedByName
+    FROM projects p
+    INNER JOIN project_categories c ON c.id = p.category_id
+    LEFT JOIN site_users su ON su.id = p.creator_user_id
+    LEFT JOIN admin_users au ON au.id = p.audited_by
+    <include refid="adminProjectWhere"/>
+    ORDER BY p.sort_order ASC, p.id DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <insert id="insertAdminProject" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    INSERT INTO projects (
+      title, description, summary, content, category_id, cover_image, status, audit_status,
+      audit_comment, sort_order, audited_by, audited_at, published_at
+    )
+    VALUES (
+      #{title}, #{description}, #{description}, #{content}, #{categoryId}, #{image}, #{status},
+      #{auditStatus}, #{auditComment}, #{sortOrder}, #{auditedBy}, #{auditedAt}, #{publishedAt}
+    )
+  </insert>
+
+  <update id="updateAdminProject">
+    UPDATE projects
+    SET title = #{title}, description = #{description}, summary = #{description}, content = #{content},
+        category_id = #{categoryId}, cover_image = #{image}, status = #{status}, audit_status = #{auditStatus},
+        audit_comment = #{auditComment}, sort_order = #{sortOrder}, audited_by = #{auditedBy},
+        audited_at = #{auditedAt}, published_at = #{publishedAt}
+    WHERE id = #{id}
+  </update>
+
+  <update id="auditProject">
+    UPDATE projects
+    SET audit_status = #{auditStatus}, audit_comment = #{auditComment}, status = #{status},
+        audited_by = #{auditedBy}, audited_at = #{auditedAt}, published_at = #{publishedAt}
+    WHERE id = #{id}
+  </update>
+
+  <insert id="insertAuditLog">
+    INSERT INTO project_audit_logs (project_id, action, from_status, to_status, comment, operator_admin_id)
+    VALUES (#{projectId}, #{action}, #{fromStatus}, #{toStatus}, #{comment}, #{operatorAdminId})
+  </insert>
+
+</mapper>

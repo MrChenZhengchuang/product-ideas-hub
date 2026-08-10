@@ -1,0 +1,28 @@
+{
+  "name": "ideahub-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=20 <23"
+  },
+  "workspaces": [
+    "apps/client",
+    "apps/mobile",
+    "apps/admin",
+    "apps/server"
+  ],
+  "scripts": {
+    "dev:client": "npm run dev --workspace client-app",
+    "dev:mobile": "npm run dev:h5 --workspace mobile-app",
+    "dev:mobile:weapp": "npm run dev:weapp --workspace mobile-app",
+    "dev:admin": "npm run dev --workspace admin-app",
+    "dev:server": "npm run dev --workspace server-app",
+    "dev:server-java": "bash apps/server-java/scripts/dev.sh",
+    "build:client": "npm run build --workspace client-app",
+    "build:mobile": "npm run build:h5 --workspace mobile-app",
+    "build:mobile:weapp": "npm run build:weapp --workspace mobile-app",
+    "build:admin": "npm run build --workspace admin-app",
+    "build:web": "npm run build:client && npm run build:admin",
+    "test:java": "cd apps/server-java && ./mvnw test"
+  }
+}

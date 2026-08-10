@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+target/
+.taro/
+.next/
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Runtime uploads and logs
+uploads/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.cursor/
+.sixth/
+*.iml
+.classpath
+.project
+.settings/
+
+# Temporary/cache files
+.cache/
+.turbo/
+.swc/
+coverage/
+*.db
+*.db-shm
+*.db-wal
+
+# Local product experiments are maintained outside the public main repository
+/project/
+
+# Accidental local secret/hash scratch files
+scrypt*{salt}*

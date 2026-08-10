@@ -1,0 +1,76 @@
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #edf2fb;
+}
+
+page {
+  background: #f5f7fb;
+  color: #111827;
+  font-size: 16px;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.taro-tabbar__tabbar {
+  height: 64px;
+}
+
+.weui-tabbar {
+  min-height: 64px;
+}
+
+.weui-tabbar__item {
+  padding: 8px 0 10px;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
+}
+
+.weui-tabbar__icon {
+  width: 30px;
+  height: 30px;
+}
+
+.weui-tabbar__icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.weui-tabbar__label {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+@media screen and (min-width: 768px) {
+  #app {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    background: #f5f7fb;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  }
+
+  #app,
+  #app .taro_router,
+  #app .taro-tabbar__container,
+  #app .taro-tabbar__panel,
+  #app .taro_page {
+    width: 100%;
+  }
+}
+
+view,
+text,
+button,
+input {
+  box-sizing: border-box;
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.productideas.mapper.MenuMapper">
+
+  <sql id="menuColumns">
+    id,
+    parent_id AS parentId,
+    name,
+    path,
+    component,
+    permission_code AS permissionCode,
+    menu_key AS menuKey,
+    menu_type AS menuType,
+    icon,
+    status,
+    visible,
+    sort_order AS sortOrder
+  </sql>
+
+  <select id="listMenusByIds" resultType="com.productideas.domain.MenuNode">
+    SELECT <include refid="menuColumns"/>
+    FROM menus
+    WHERE id IN
+    <foreach collection="menuIds" item="menuId" open="(" separator="," close=")">
+      #{menuId}
+    </foreach>
+      AND status = '启用'
+    ORDER BY sort_order ASC, id ASC
+  </select>
+
+  <select id="listMenuIdsByRoleIds" resultType="long">
+    SELECT DISTINCT rm.menu_id
+    FROM role_menus rm
+    WHERE rm.role_id IN
+    <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+      #{roleId}
+    </foreach>
+    ORDER BY rm.menu_id ASC
+  </select>
+
+</mapper>

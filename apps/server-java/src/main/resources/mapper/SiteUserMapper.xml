@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.productideas.mapper.SiteUserMapper">
+
+  <sql id="adminUserWhere">
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND (nickname LIKE CONCAT('%', #{keyword}, '%') OR phone LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
+      <if test="status != null and status != ''">
+        AND status = #{status}
+      </if>
+    </where>
+  </sql>
+
+  <select id="countAdminUsers" resultType="long">
+    SELECT COUNT(*)
+    FROM site_users
+    <include refid="adminUserWhere"/>
+  </select>
+
+  <select id="listAdminUsers" resultType="com.productideas.domain.SiteUserAdminItem">
+    SELECT id, nickname, phone, member_level AS level, status
+    FROM site_users
+    <include refid="adminUserWhere"/>
+    ORDER BY id ASC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+</mapper>

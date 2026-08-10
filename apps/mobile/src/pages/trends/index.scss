@@ -1,0 +1,68 @@
+.mobile-trends__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mobile-trends__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.mobile-trends__rank {
+  color: #2151f5;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mobile-trends__title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mobile-trends__description {
+  color: #475467;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.mobile-trends__signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mobile-trends__signal {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #eef3ff;
+  color: #27417a;
+  font-size: 13px;
+}
+
+.mobile-trends__rules {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.mobile-trends__rules-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mobile-trends__rule-item {
+  color: #52607a;
+  font-size: 14px;
+  line-height: 1.6;
+}

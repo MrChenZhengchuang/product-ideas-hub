@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:8080}
+  address: ${HOST:127.0.0.1}
+
+spring:
+  application:
+    name: product-ideas-server-java
+  main:
+    banner-mode: console
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  datasource:
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:product_ideas}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:replace-with-a-secure-secret}
+    expires-in-seconds: ${JWT_EXPIRES_IN:43200}
+  cors:
+    allowed-origin-pattern: ${CORS_ALLOWED_ORIGIN_PATTERN:^https?://(localhost|127\.0\.0\.1):\d+$}
+  upload:
+    dir: ${UPLOAD_DIR:uploads}
+    max-size-bytes: ${UPLOAD_MAX_SIZE:2097152}
+
+logging:
+  level:
+    root: INFO
+    com.productideas: INFO
+    access: INFO
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level) %clr(%logger{20}){cyan} : %msg%n"

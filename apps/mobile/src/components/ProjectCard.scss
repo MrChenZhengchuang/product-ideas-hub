@@ -1,0 +1,74 @@
+.mobile-project-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
+}
+
+.mobile-project-card__image {
+  width: 100%;
+  height: 220px;
+  background: #dbe4f0;
+}
+
+.mobile-project-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+}
+
+.mobile-project-card__category-row,
+.mobile-project-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-project-card__category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #f3f6fc;
+}
+
+.mobile-project-card__category-icon {
+  color: #3f5277;
+}
+
+.mobile-project-card__category {
+  color: #3f5277;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mobile-project-card__title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mobile-project-card__description {
+  color: #667085;
+  font-size: 15px;
+  line-height: 1.6;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.mobile-project-card__link {
+  color: #2151f5;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.mobile-project-card__link-icon {
+  color: #2151f5;
+}

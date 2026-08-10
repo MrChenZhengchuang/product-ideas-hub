@@ -1,0 +1,41 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: productideas
+      MYSQL_DATABASE: product_ideas
+    ports:
+      - "3306:3306"
+    volumes:
+      - product-ideas-mysql:/var/lib/mysql
+      - ./apps/server/sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-pproductideas"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ./apps/server-java
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: productideas
+      DB_NAME: product_ideas
+      JWT_SECRET: local-docker-demo-secret-change-before-production
+      CORS_ALLOWED_ORIGIN_PATTERN: ^https?://(localhost|127\.0\.0\.1):\d+$
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - product-ideas-uploads:/app/uploads
+
+volumes:
+  product-ideas-mysql:
+  product-ideas-uploads:

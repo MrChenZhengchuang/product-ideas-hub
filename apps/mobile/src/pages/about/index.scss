@@ -1,0 +1,30 @@
+.mobile-about__section,
+.mobile-about__principles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.mobile-about__section-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.mobile-about__section-body {
+  color: #475467;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.mobile-about__principle {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #f5f7fb;
+  color: #52607a;
+  font-size: 14px;
+  line-height: 1.6;
+}

@@ -1,0 +1,25 @@
+.migration-cards {
+  display: grid;
+  gap: 16px;
+}
+
+.migration-cards__item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.migration-cards__title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.migration-cards__body {
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.6;
+}

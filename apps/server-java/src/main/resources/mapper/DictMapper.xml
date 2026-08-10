@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.productideas.mapper.DictMapper">
+
+  <sql id="dictTypeWhere">
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND (dt.name LIKE CONCAT('%', #{keyword}, '%') OR dt.code LIKE CONCAT('%', #{keyword}, '%'))
+      </if>
+      <if test="status != null and status != ''">
+        AND dt.status = #{status}
+      </if>
+    </where>
+  </sql>
+
+  <select id="countDictTypes" resultType="long">
+    SELECT COUNT(DISTINCT dt.id)
+    FROM dict_types dt
+    LEFT JOIN dict_items di ON di.dict_type_id = dt.id
+    <include refid="dictTypeWhere"/>
+  </select>
+
+  <select id="listDictTypes" resultType="com.productideas.domain.DictTypeItem">
+    SELECT
+      dt.id,
+      dt.name,
+      dt.code,
+      dt.value_type AS valueType,
+      dt.status,
+      dt.sort_order AS sortOrder,
+      dt.remark,
+      COUNT(di.id) AS itemCount
+    FROM dict_types dt
+    LEFT JOIN dict_items di ON di.dict_type_id = dt.id
+    <include refid="dictTypeWhere"/>
+    GROUP BY dt.id, dt.name, dt.code, dt.value_type, dt.status, dt.sort_order, dt.remark
+    ORDER BY dt.sort_order ASC, dt.id ASC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <sql id="dictItemWhere">
+    WHERE dict_type_id = #{dictTypeId}
+    <if test="keyword != null and keyword != ''">
+      AND (label LIKE CONCAT('%', #{keyword}, '%') OR value LIKE CONCAT('%', #{keyword}, '%'))
+    </if>
+    <if test="status != null and status != ''">
+      AND status = #{status}
+    </if>
+  </sql>
+
+  <select id="countDictItems" resultType="long">
+    SELECT COUNT(*)
+    FROM dict_items
+    <include refid="dictItemWhere"/>
+  </select>
+
+  <select id="listDictItemsFiltered" resultType="com.productideas.domain.DictItemNode">
+    SELECT
+      id,
+      dict_type_id AS dictTypeId,
+      parent_id AS parentId,
+      label,
+      value,
+      status,
+      sort_order AS sortOrder,
+      remark
+    FROM dict_items
+    <include refid="dictItemWhere"/>
+    ORDER BY sort_order ASC, id ASC
+    <if test="limit != null">
+      LIMIT #{limit} OFFSET #{offset}
+    </if>
+  </select>
+
+</mapper>

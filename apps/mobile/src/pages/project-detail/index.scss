@@ -1,0 +1,47 @@
+.mobile-project-detail__image {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #dbe4f0;
+}
+
+.mobile-project-detail__meta {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #52607a;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.mobile-project-detail__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mobile-project-detail__action {
+  height: 48px;
+  border-radius: 14px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.mobile-project-detail__action--active {
+  background: #2151f5;
+}
+
+.mobile-project-detail__notice,
+.mobile-project-detail__content {
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 15px;
+  line-height: 1.7;
+}
