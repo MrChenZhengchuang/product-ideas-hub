@@ -33,6 +33,7 @@ public class AccessLogFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger("access");
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final int MAX_BODY_LOG_LENGTH = 2048;
+    private static final int MAX_CACHED_REQUEST_BODY_LENGTH = 64 * 1024;
     private static final Set<String> SENSITIVE_KEYS = Set.of(
         "password",
         "oldpassword",
@@ -54,7 +55,10 @@ public class AccessLogFilter extends OncePerRequestFilter {
         FilterChain filterChain
     ) throws ServletException, IOException {
         long startedAt = System.currentTimeMillis();
-        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
+        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(
+            request,
+            MAX_CACHED_REQUEST_BODY_LENGTH
+        );
 
         try {
             filterChain.doFilter(wrappedRequest, response);
