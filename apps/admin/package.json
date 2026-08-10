@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.5.0",
+    "@ant-design/icons": "^6.3.2",
     "@iconify-json/flat-color-icons": "^1.2.3",
     "@iconify-json/icon-park-outline": "^1.2.4",
     "@iconify-json/mdi": "^1.2.3",
